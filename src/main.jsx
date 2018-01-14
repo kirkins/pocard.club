@@ -22,12 +22,17 @@ class SignUpForm extends React.Component {
     super(props);
     this.state = {
       phone_number: '',
+      email: '',
       password: '',
     };
   }
 
   handlePhoneChange(e) {
     this.setState({phone_number: e.target.value});
+  }
+
+  handleEmailChange(e) {
+    this.setState({email: e.target.value});
   }
 
   handlePasswordChange(e) {
@@ -37,14 +42,19 @@ class SignUpForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const phone_number = this.state.phone_number.trim();
+    const email = this.state.email.trim();
     const password = this.state.password.trim();
     const attributeList = [
       new CognitoUserAttribute({
         Name: 'phone_number',
         Value: phone_number,
+      }),
+      new CognitoUserAttribute({
+        Name: 'email',
+        Value: email,
       })
     ];
-    userPool.signUp(phone_number, password, attributeList, null, (err, result) => {
+    userPool.signUp(email, password, attributeList, null, (err, result) => {
       if (err) {
         console.log(err);
         return;
@@ -61,6 +71,10 @@ class SignUpForm extends React.Component {
                value={this.state.phone_number}
                placeholder="Phone"
                onChange={this.handlePhoneChange.bind(this)}/>
+        <input type="text"
+               value={this.state.email}
+               placeholder="Email"
+               onChange={this.handleEmailChange.bind(this)}/>
         <input type="password"
                value={this.state.password}
                placeholder="Password"
